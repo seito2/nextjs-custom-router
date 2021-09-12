@@ -1,17 +1,17 @@
 import { NextRouter, useRouter } from "next/dist/client/router";
 
 export const useCustomRouter = (
-  cancelCondition: () => boolean,
-  callback?: () => void
+  cancelCondition: (router: NextRouter) => boolean,
+  callback?: (router: NextRouter) => void
 ): NextRouter => {
   const router = useRouter();
 
   return {
     ...router,
     push: async (...props: Parameters<NextRouter['push']>) => {
-      if (cancelCondition()) {
+      if (cancelCondition(router)) {
         if (typeof callback === 'function') {
-          callback();
+          callback(router);
         }
         return false;
       }
@@ -19,9 +19,9 @@ export const useCustomRouter = (
       return router.push(...props);
     },
     replace: async (...props: Parameters<NextRouter['replace']>) => {
-      if (cancelCondition()) {
+      if (cancelCondition(router)) {
         if (typeof callback === 'function') {
-          callback();
+          callback(router);
         }
         return false;
       }
@@ -29,9 +29,9 @@ export const useCustomRouter = (
       return router.replace(...props);
     },
     reload: async (...props: Parameters<NextRouter['reload']>) => {
-      if (cancelCondition()) {
+      if (cancelCondition(router)) {
         if (typeof callback === 'function') {
-          callback();
+          callback(router);
         }
         return false;
       }
@@ -39,9 +39,9 @@ export const useCustomRouter = (
       return router.reload(...props);
     },
     back: async (...props: Parameters<NextRouter['back']>) => {
-      if (cancelCondition()) {
+      if (cancelCondition(router)) {
         if (typeof callback === 'function') {
-          callback();
+          callback(router);
         }
         return false;
       }
@@ -49,9 +49,9 @@ export const useCustomRouter = (
       return router.back(...props);
     },
     prefetch: async (...props: Parameters<NextRouter['prefetch']>) => {
-      if (cancelCondition()) {
+      if (cancelCondition(router)) {
         if (typeof callback === 'function') {
-          callback();
+          callback(router);
         }
         return;
       }
@@ -61,9 +61,9 @@ export const useCustomRouter = (
     beforePopState: async (
       ...props: Parameters<NextRouter['beforePopState']>
     ) => {
-      if (cancelCondition()) {
+      if (cancelCondition(router)) {
         if (typeof callback === 'function') {
-          callback();
+          callback(router);
         }
         return;
       }
